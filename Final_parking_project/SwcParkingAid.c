@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <avr/interrupt.h>
 
-static uint16_t sonicDistance;
+volatile uint16_t num_of_freq;
 static SwitchStateType pwtSwitchState;
 static const uint16_t DIST_LOW_TH_CM = 30u;
 static const uint16_t DIST_MED_TH_CM = 70u;
@@ -22,8 +22,9 @@ void SwcParkingAid_Init()
 	flag = ZERO;
 	cnt = ZERO;
 	pwtSwitchState = SWITCH_OFF;
-	sonicDistance = UINT16_MAX;
-	DDRB |= (ONE << DDB1);
+	sonicDistanca = UINT16_MAX;
+	num_of_freq = ZERO;
+	DDRB |= (ONE << DDB1) | (ONE << DDB2);
 	/* Setting parameters of the TIMER1 */
 	TIMSK1 = (ONE << TOIE1);	/* Enable Timer1 overflow interrupts */
 	TCCR1A = ZERO;
@@ -43,9 +44,9 @@ void SwcParkingAid_Cyclic()
 	if(pwtSwitchState)
 	{
 		UltrasonicSensor_StartMeasurement();
-		sonicDistance = UltrasonicSensor_GetMeasurement();
-		printf("sonicDistance is: %d cm\n", sonicDistance); 
-		if(sonicDistance <=  DIST_LOW_TH_CM)
+		sonicDistanca = UltrasonicSensor_GetMeasurement();
+		//printf("sonicDistanca is: %d cm\n", sonicDistanca); 
+		if(sonicDistanca <=  DIST_LOW_TH_CM)
 		{
 			LedSegmentDisplay_ActivateSegment(LED_SEGMENT_A);
 			LedSegmentDisplay_ActivateSegment(LED_SEGMENT_F);
@@ -53,7 +54,7 @@ void SwcParkingAid_Cyclic()
 			LedSegmentDisplay_DeactivateSegment(LED_SEGMENT_G);
 			LedSegmentDisplay_DeactivateSegment(LED_SEGMENT_D);
 		}
-		else if(sonicDistance <= DIST_MED_TH_CM)
+		else if(sonicDistanca <= DIST_MED_TH_CM)
 		{
 			LedSegmentDisplay_ActivateSegment(LED_SEGMENT_F);
 			LedSegmentDisplay_ActivateSegment(LED_SEGMENT_G);
@@ -61,7 +62,7 @@ void SwcParkingAid_Cyclic()
 			LedSegmentDisplay_DeactivateSegment(LED_SEGMENT_D);
 			LedSegmentDisplay_DeactivateSegment(LED_SEGMENT_A);
 		}
-		else if(sonicDistance <= DIST_HIGH_TH_CM)
+		else if(sonicDistanca <= DIST_HIGH_TH_CM)
 		{
 			LedSegmentDisplay_ActivateSegment(LED_SEGMENT_F);
 			LedSegmentDisplay_ActivateSegment(LED_SEGMENT_E);

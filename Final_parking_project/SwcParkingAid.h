@@ -9,6 +9,7 @@
 #ifndef SWCPARKINGAID_H_
 #define SWCPARKINGAID_H_
 
+uint16_t sonicDistanca;
 uint16_t cnt;
 uint8_t flag;
 

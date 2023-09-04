@@ -36,7 +36,7 @@ void UltrasonicSensor_Init()
 /* Ultrasonic Sensor StartMeasurement() first calculates time, then, based on time, calculates distance. */
 void UltrasonicSensor_StartMeasurement()
 {
-	  wdt_enable(WDTO_30MS); /* Activation of watchdog timer*/
+	  //wdt_enable(WDTO_30MS); /* Activation of watchdog timer*/
 	  PORTB |= (ONE << SONIC_RX_PIN_NUM);
 	  _delay_us(10);
 	  PORTB &= ~(ONE << SONIC_RX_PIN_NUM);
@@ -55,8 +55,8 @@ void UltrasonicSensor_StartMeasurement()
 	  count = ICR1 + (MAX_CNT_TIMER_1 * Timer_overflov);
 	  sonicDistance = count/931.9; /* Calculating the distance */
 	  sonicState = SONIC_FINISH;
-	  wdt_reset();
-	  wdt_disable();	
+	  //wdt_reset();
+	  //wdt_disable();	
 }
 
 /* This function return the value of the distance measured by Ultrasonic Ranging Module HC - SR04 */
